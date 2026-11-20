@@ -1,89 +1,234 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Login Page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Portal</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        .login-box {
-            background: white;
-            padding: 35px;
-            width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            text-align: center;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
 
-        h2 {
-            color: #333;
-        }
+.card {
+    width: 360px;
+    max-width: 92%;
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+.subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 25px;
+}
 
-        button:hover {
-            background: #5268d9;
-        }
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
 
-        p {
-            color: #666;
-        }
-    </style>
+input:focus {
+    border-color: #667eea;
+}
+
+button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: #667eea;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+button:hover {
+    background: #5268d9;
+}
+
+.link {
+    color: #667eea;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    padding-right: 65px;
+}
+
+.show-btn {
+    position: absolute;
+    right: 8px;
+    top: 18px;
+    width: auto;
+    padding: 5px;
+    margin: 0;
+    background: transparent;
+    color: #667eea;
+    font-size: 12px;
+}
+
+.show-btn:hover {
+    background: transparent;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+</style>
 </head>
 
 <body>
 
-    <div class="login-box">
+<div class="card">
+
+    <!-- LOGIN SECTION -->
+    <div id="loginPage">
         <h2>Welcome Back 👋</h2>
-        <p>Login to your account</p>
+        <p class="subtitle">Login to your account</p>
 
-        <input type="email" id="email" placeholder="Enter Email">
+        <input type="email" id="loginEmail" placeholder="Email Address">
 
-        <input type="password" id="password" placeholder="Enter Password">
+        <div class="password-box">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button class="show-btn" onclick="togglePassword('loginPassword', this)">Show</button>
+        </div>
+
+        <div class="options">
+            <label><input type="checkbox" style="width:auto"> Remember me</label>
+            <span class="link" onclick="forgotPassword()">Forgot Password?</span>
+        </div>
 
         <button onclick="login()">Login</button>
+
+        <div class="footer">
+            Don't have an account?
+            <span class="link" onclick="showSignup()">Sign Up</span>
+        </div>
     </div>
 
-    <script>
-        function login() {
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
+    <!-- SIGNUP SECTION -->
+    <div id="signupPage" class="hidden">
+        <h2>Create Account ✨</h2>
+        <p class="subtitle">Register your new account</p>
 
-            if (email === "" || password === "") {
-                alert("Please enter email and password");
-            } else {
-                alert("Welcome " + email);
-            }
-        }
-    </script>
+        <input type="text" id="signupName" placeholder="Full Name">
+        <input type="email" id="signupEmail" placeholder="Email Address">
+
+        <div class="password-box">
+            <input type="password" id="signupPassword" placeholder="Create Password">
+            <button class="show-btn" onclick="togglePassword('signupPassword', this)">Show</button>
+        </div>
+
+        <button onclick="signup()">Create Account</button>
+
+        <div class="footer">
+            Already have an account?
+            <span class="link" onclick="showLogin()">Login</span>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function togglePassword(id, button) {
+    let input = document.getElementById(id);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.innerText = "Hide";
+    } else {
+        input.type = "password";
+        button.innerText = "Show";
+    }
+}
+
+function login() {
+    let email = document.getElementById("loginEmail").value;
+    let password = document.getElementById("loginPassword").value;
+
+    if (email === "" || password === "") {
+        alert("Please enter email and password!");
+    } else {
+        alert("Login demo successful for: " + email);
+    }
+}
+
+function forgotPassword() {
+    let email = document.getElementById("loginEmail").value;
+
+    if (email === "") {
+        alert("Please enter your email address first.");
+    } else {
+        alert("Password reset demo for: " + email);
+    }
+}
+
+function showSignup() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("signupPage").classList.remove("hidden");
+}
+
+function showLogin() {
+    document.getElementById("signupPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function signup() {
+    let name = document.getElementById("signupName").value;
+    let email = document.getElementById("signupEmail").value;
+    let password = document.getElementById("signupPassword").value;
+
+    if (name === "" || email === "" || password === "") {
+        alert("Please fill all fields!");
+    } else {
+        alert("Welcome " + name + "! Signup demo completed.");
+    }
+}
+</script>
 
 </body>
 </html>
